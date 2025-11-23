@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 
-// IMPORTANT: point to /api/notes
+// Backend API (Render) - important: /api/notes
 const API_URL = "https://notes-backend-0g16.onrender.com/api/notes";
 
 function App() {
@@ -41,31 +41,29 @@ function App() {
     }, 2500);
   };
 
-  // ====== DATA LOGIC ======
-
-  const fetchNotes = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(API_URL);
-      // console.log("API response:", res.data);
-
-      if (Array.isArray(res.data)) {
-        setNotes(res.data);
-      } else {
-        setNotes([]);
-        showPopup("Unexpected response from server", "error");
-      }
-    } catch (err) {
-      console.log("Error fetching notes", err);
-      showPopup("Could not load notes", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // ====== LOAD NOTES ONCE (NO fetchNotes FUNCTION) ======
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    const loadNotes = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(API_URL);
+
+        if (Array.isArray(res.data)) {
+          setNotes(res.data);
+        } else {
+          setNotes([]);
+          showPopup("Unexpected response from server", "error");
+        }
+      } catch (err) {
+        console.log("Error fetching notes", err);
+        showPopup("Could not load notes", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadNotes(); // call the async loader
+  }, []); // eslint is happy: no external dependency
 
   const handleSubmit = async (e) => {
     e.preventDefault();
