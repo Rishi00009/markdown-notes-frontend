@@ -54,7 +54,7 @@ frontend/
 ### Clone Repo
 
 ```sh
-git clone https://github.com/YOUR-USERNAME/Notes-App.git
+git clone https://github.com/Rishi00009/Notes-App.git
 cd frontend
 ```
 
